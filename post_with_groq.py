@@ -205,6 +205,12 @@ def main():
 
 
 if __name__ == "__main__":
+    # Toggle to completely disable posting (e.g. for tests)
+    auto_flag = os.getenv("AUTO_POST_ENABLED", "true").lower()
+    if auto_flag not in ("true", "1", "yes", "y"):
+        print("[Toggle] AUTO_POST_ENABLED is off. Exiting without posting.")
+        exit(0)
+        
     try:
         # Random delay before posting (cron will run between 7–12, or once daily;
         # this adds extra "randomness" within that window if you want)

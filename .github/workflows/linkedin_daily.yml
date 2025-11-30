@@ -1,0 +1,41 @@
+name: Daily LinkedIn Auto Post
+
+on:
+  schedule:
+    # Runs every day at 01:30 UTC
+    # 01:30 UTC = 07:00 IST
+    - cron: "30 1 * * *"
+  workflow_dispatch: {}
+  # ↑ This lets you manually trigger from GitHub UI (useful for tests)
+
+jobs:
+  run-daily-post:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run LinkedIn auto-post script
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          LINKEDIN_ACCESS_TOKEN: ${{ secrets.LINKEDIN_ACCESS_TOKEN }}
+          LINKEDIN_AUTHOR_URN: ${{ secrets.LINKEDIN_AUTHOR_URN }}
+          EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
+          EMAIL_TO: ${{ secrets.EMAIL_TO }}
+          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+          SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          AUTO_POST_ENABLED: "true"
+        run: |
+          python post_with_groq.py

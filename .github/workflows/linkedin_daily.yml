@@ -36,6 +36,6 @@ jobs:
           EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
           SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
           SMTP_PORT: ${{ secrets.SMTP_PORT }}
-          AUTO_POST_ENABLED: "true"
+          AUTO_POST_ENABLED: "False"
         run: |
           python post_with_groq.py
